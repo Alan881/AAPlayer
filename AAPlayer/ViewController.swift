@@ -8,7 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+
+
+class ViewController: UIViewController, AAPlayerDelegate {
+    
     @IBOutlet weak var player: AAPlayer!
     fileprivate var sourceArray: Array<Any>!
     fileprivate var currentIndex = 0
@@ -16,7 +19,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sourceArray = ["http://live.zzbtv.com:80/live/live123/800K/tzwj_video.m3u8","http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0173bbaf5acf62b815a7de0544730d6c.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/00a52c5e2213216ce0ce3795d40e9492.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0045ab5a9e440defb2611658c0914724.mp4"]
+        sourceArray = ["http://live.zzbtv.com:80/live/live123/800K/tzwj_video.m3u8","http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0173bbaf5acf62b815a7de0544730d6c.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/00a52c5e2213216ce0ce3795d40e9492.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0045ab5a9e440defb2611658c0914724.mp4","ddd"]
+        player.delegate = self
         player.playVideo(sourceArray[currentIndex] as! String)
         
     }
@@ -45,6 +49,22 @@ class ViewController: UIViewController {
         
     }
     
+    func callBackDownloadDidFinish(_ status: playerItemStatus?) {
+        
+        let status:playerItemStatus = status!
+        switch status {
+            
+        case .readyToPlay:
+            
+          
+            break
+        case .failed:
+            
+            break
+        default:
+            break
+        }
+    }
     
 
     override func didReceiveMemoryWarning() {

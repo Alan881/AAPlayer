@@ -16,6 +16,7 @@
 		E7A6C3FC1F03DE130029AFD7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A6C3FA1F03DE130029AFD7 /* LaunchScreen.storyboard */; };
 		E7A6C4041F03DEB90029AFD7 /* AAPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6C4031F03DEB90029AFD7 /* AAPlayer.swift */; };
 		E7A6C4061F0781D70029AFD7 /* AAPlayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6C4051F0781D70029AFD7 /* AAPlayButton.swift */; };
+		E7AB53271F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AB53261F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		E7A6C3FD1F03DE130029AFD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7A6C4031F03DEB90029AFD7 /* AAPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAPlayer.swift; sourceTree = "<group>"; };
 		E7A6C4051F0781D70029AFD7 /* AAPlayButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAPlayButton.swift; sourceTree = "<group>"; };
+		E7AB53261F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAPlayerActivityIndicicatorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +52,7 @@
 				E72390C01F07D630000C8AC8 /* AAPlayProgressView.swift */,
 				E7A6C4051F0781D70029AFD7 /* AAPlayButton.swift */,
 				E718C2281F092CD100426ED9 /* AAPlayerSlider.swift */,
+				E7AB53261F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift */,
 			);
 			name = AAPlayer;
 			sourceTree = "<group>";
@@ -163,6 +166,7 @@
 				E7A6C3F21F03DE130029AFD7 /* AppDelegate.swift in Sources */,
 				E7A6C4041F03DEB90029AFD7 /* AAPlayer.swift in Sources */,
 				E72390C11F07D630000C8AC8 /* AAPlayProgressView.swift in Sources */,
+				E7AB53271F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

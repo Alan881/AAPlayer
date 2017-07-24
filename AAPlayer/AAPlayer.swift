@@ -9,13 +9,24 @@
 import UIKit
 import AVFoundation
 
+
+protocol AAPlayerDelegate : class {
+   
+    typealias playerItemStatus = AVPlayerItemStatus
+    func callBackDownloadDidFinish(_ status:AVPlayerItemStatus?)
+}
+
+
 class AAPlayer: UIView {
     
+    weak var delegate:AAPlayerDelegate?
+   
     fileprivate var player:AVPlayer?
     fileprivate var playerLayer:AVPlayerLayer?
     fileprivate var playerItem:AVPlayerItem?
     fileprivate var playUrl:String!
     fileprivate var playButton:AAPlayButton!
+    fileprivate var playActivityIndicator:AAPlayerActivityIndicicatorView!
     fileprivate var smallPlayButton:AAPlayButton!
     fileprivate var playProgressView:AAPlayProgressView!
     fileprivate var playerSlider:AAPlayerSlider!
@@ -23,6 +34,7 @@ class AAPlayer: UIView {
     fileprivate var timeLabel:UILabel!
     fileprivate var timer:Timer?
     fileprivate var playbackObserver:Any?
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -32,6 +44,7 @@ class AAPlayer: UIView {
         initWithPlayProgressView()
         initWithSlider()
         initWithTimeLabel()
+        initWithPlayActivityIndicator()
     }
     
     //MARK:- Interface Builder(Xib,StoryBoard)
@@ -43,7 +56,7 @@ class AAPlayer: UIView {
         initWithPlayProgressView()
         initWithSlider()
         initWithTimeLabel()
-        
+        initWithPlayActivityIndicator()
     }
 
     deinit {
@@ -56,6 +69,7 @@ class AAPlayer: UIView {
         super.layoutSubviews()
         
         setPlayerSubviewsFrame()
+        
     }
     
     
@@ -83,6 +97,14 @@ class AAPlayer: UIView {
         smallPlayButton = AAPlayButton()
         smallPlayButton.addTarget(self, action: #selector(startPlay), for: .touchUpInside)
         playerBottomView.addSubview(smallPlayButton)
+    }
+    
+    
+    fileprivate func initWithPlayActivityIndicator() {
+        
+        playActivityIndicator = AAPlayerActivityIndicicatorView()
+        addSubview(playActivityIndicator)
+        
     }
     
     fileprivate func initWithPlayProgressView() {
@@ -127,6 +149,8 @@ class AAPlayer: UIView {
         playerSlider.frame = CGRect(x: 45, y: playerBottomView.frame.height / 2 - 9, width: playerBottomView.frame.width - 140, height: 20)
         smallPlayButton.frame = CGRect(x: 10, y: playerBottomView.frame.height / 2 - 11, width: 30, height: 25)
         timeLabel.frame = CGRect(x: playerBottomView.frame.width - 95, y: playerBottomView.frame.height / 2 - 9, width: 100, height: 20)
+        playActivityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
+        playActivityIndicator.frame.size = CGSize(width: 90, height: 90)
     }
     
     
@@ -190,14 +214,14 @@ class AAPlayer: UIView {
     }
     
     
-    //MARK:- check player status
+    //MARK:- check playItem status
     fileprivate func observePlayerStatus() {
         
         let status:AVPlayerItemStatus = (player?.currentItem?.status)!
         switch status {
         case .readyToPlay:
             
-            if Float(CMTimeGetSeconds((playerItem?.duration)!)).isNaN  == true { return }
+            if Float(CMTimeGetSeconds((playerItem?.duration)!)).isNaN  == true { break }
             playerSlider.addTarget(self, action: #selector(changePlayerProgress), for: .valueChanged)
             playerSlider.maximumValue = Float(CMTimeGetSeconds((playerItem?.duration)!))
             let allTimeString = timeFotmatter(Float(CMTimeGetSeconds((playerItem?.duration)!)))
@@ -207,7 +231,7 @@ class AAPlayer: UIView {
                 self.timeLabel.text = "\(self.timeFotmatter(Float(time)))/\(allTimeString)"
                 if !self.playerSlider.isHighlighted {
                     self.playerSlider.value = Float(time)
-                } 
+                }
             })
             
             break
@@ -218,9 +242,16 @@ class AAPlayer: UIView {
             
             break
         }
-        
+        playActivityIndicator.stopAnimation()
+        downloadDidFinish(status)
     }
     
+    
+    //MARK:- call back playItem status
+    fileprivate func downloadDidFinish(_ status:AVPlayerItemStatus?) {
+    
+        delegate?.callBackDownloadDidFinish(status)
+    }
  
    //MARK:- get buffer time duration
     fileprivate func getBufferTimeDuration() -> TimeInterval {
@@ -265,6 +296,7 @@ class AAPlayer: UIView {
         if playButton.isHidden == false {
             setPlayRemoteUrl()
             setPlayBottomViewAnimation()
+            playActivityIndicator.startAnimation()
         }
         
         if player?.rate == 0 {
@@ -325,6 +357,7 @@ class AAPlayer: UIView {
     //MARK:- change player progress
     @objc fileprivate func changePlayerProgress() {
         
+        playActivityIndicator.startAnimation()
         let seekDuration = playerSlider.value
         player?.seek(to: CMTimeMake(Int64(seekDuration), 1), completionHandler: { (BOOL) in
             
@@ -368,6 +401,16 @@ class AAPlayer: UIView {
         playerSlider.value = 0.0
         timeLabel.text = "00:00:00/00:00:00"
     }
+    
+    func startPlayback() {
+        
+        player?.play()
+    }
+    
+    func pausePlayback() {
+        
+        player?.pause()
+    }
    
     /*
     // Only override draw() if you perform custom drawing.
@@ -377,4 +420,13 @@ class AAPlayer: UIView {
     }
     */
 
+}
+
+
+extension AAPlayerDelegate {
+    
+    public func callBackDownloadDidFinish(_ status:AVPlayerItemStatus?) {
+        
+      
+    }
 }
