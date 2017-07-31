@@ -165,7 +165,7 @@ class AAPlayer: UIView {
     }
     
     //MARL:- interface orientation
-    func detectedInterfaceOrientation()  {
+    fileprivate func detectedInterfaceOrientation()  {
         
         switch UIDevice.current.orientation {
         case .portrait:
