@@ -58,12 +58,9 @@ The following sample code for your reference.
         
         let status:playerItemStatus = status!
         switch status {
-            
         case .readyToPlay:
-            
             break
         case .failed:
-            
             break
         default:
             break
