@@ -84,3 +84,6 @@ The following sample code for your reference.
     }
 
 ```
+# License
+
+AAPlayer is available under the MIT license. See the LICENSE file for more info.
