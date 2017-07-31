@@ -154,8 +154,8 @@ class AAPlayer: UIView {
         playerLayer?.frame = bounds
         playButton.frame = CGRect(x: frame.width / 2 - 25, y: frame.height / 2 - 25, width: 50, height: 50)
         playButton.center = CGPoint(x: frame.width / 2 , y: frame.height / 2)
-        playProgressView.frame = CGRect(x: 50, y: playerBottomView.frame.height / 2, width: playerBottomView.frame.width - 230, height: 2)
-        playerSlider.frame = CGRect(x: 45, y: playerBottomView.frame.height / 2 - 9, width: playerBottomView.frame.width - 205, height: 20)
+        playProgressView.frame = CGRect(x: 60, y: playerBottomView.frame.height / 2, width: playerBottomView.frame.width - 240, height: 2)
+        playerSlider.frame = CGRect(x: 55, y: playerBottomView.frame.height / 2 - 9, width: playerBottomView.frame.width - 215, height: 20)
         smallPlayButton.frame = CGRect(x: 10, y: playerBottomView.frame.height / 2 - 11, width: 30, height: 25)
         timeLabel.frame = CGRect(x: playerBottomView.frame.width - 155, y: playerBottomView.frame.height / 2 - 9, width: 110, height: 20)
         playActivityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
@@ -390,9 +390,7 @@ class AAPlayer: UIView {
         playActivityIndicator.startAnimation()
         let seekDuration = playerSlider.value
         player?.seek(to: CMTimeMake(Int64(seekDuration), 1), completionHandler: { (BOOL) in
-            if self.playProgressView.progress == 1.0 {
-                self.playActivityIndicator.stopAnimation()
-            }
+            self.playActivityIndicator.stopAnimation()
         })
 
     }

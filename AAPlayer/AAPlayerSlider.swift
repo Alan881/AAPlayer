@@ -21,7 +21,7 @@ class AAPlayerSlider: UISlider {
     
     override func thumbRect(forBounds bounds: CGRect, trackRect rect: CGRect, value: Float) -> CGRect {
         let rect = super.thumbRect(forBounds: bounds, trackRect: rect, value: value)
-        return CGRect(x: rect.origin.x + 2.5, y: rect.origin.y + 2, width: rect.width, height: rect.height)
+        return CGRect(x: rect.origin.x, y: rect.origin.y + 2, width: rect.width, height: rect.height)
     }
     
     fileprivate func setThumbImage() {
