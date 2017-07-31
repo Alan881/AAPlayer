@@ -9,3 +9,7 @@
 - [x] Use UIGraphics to draw icons for buttons
 - [x] Supported video formats : HLS, mp4
 - [x] Require iOS 8 or later
+
+#### Playing Status
+
+![](./sampleImage/samplePlay.gif)
