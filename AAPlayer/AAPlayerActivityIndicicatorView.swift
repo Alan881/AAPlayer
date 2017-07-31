@@ -43,19 +43,17 @@ class AAPlayerActivityIndicicatorView: UIView {
         UIGraphicsBeginImageContext(CGSize(width: frame.width, height: frame.height))
         let context = UIGraphicsGetCurrentContext()
         let path:CGMutablePath = CGMutablePath()
-        context!.addArc(center:CGPoint(x: frame.width / 2, y: frame.height / 2), radius: 50, startAngle: 0, endAngle: 1.5 * CGFloat(Double.pi), clockwise: true)
+        context!.addArc(center:CGPoint(x: frame.width / 2, y: frame.height / 2), radius: 40, startAngle: 0, endAngle: 1.5 * CGFloat(Double.pi), clockwise: true)
         context!.move(to: CGPoint(x: 50, y: 100))
         context!.addLine(to: CGPoint(x: 50, y: 150))
         context!.addLine(to: CGPoint(x: 100, y: 150))
         context!.addPath(path)
-        let colors = [UIColor(red: 66/255, green: 114/255, blue: 155/255, alpha: 1).cgColor,UIColor.gray.cgColor]
+        let colors = [UIColor(red: 231/255, green: 107/255, blue: 107/255, alpha: 0.6).cgColor,UIColor(red: 231/255, green: 107/255, blue: 107/255, alpha: 0.3).cgColor]
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colorLocations:[CGFloat] = [0.5, 1.0]
-        let gradient = CGGradient(colorsSpace: colorSpace,
-                                  colors: colors as CFArray,
-                                  locations: colorLocations)
-        context?.drawRadialGradient(gradient!, startCenter:CGPoint(x: frame.width / 2, y: frame.height / 2), startRadius: 0, endCenter: CGPoint(x: frame.width / 2 + 5, y: frame.height / 2 + 5), endRadius: 15, options: .drawsBeforeStartLocation)
-        UIColor(red: 66/255, green: 114/255, blue: 155/255, alpha: 1).setStroke()
+        let colorLocations:[CGFloat] = [0.6, 1.0]
+        let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: colorLocations)
+        context?.drawRadialGradient(gradient!, startCenter:CGPoint(x: frame.width / 2, y: frame.height / 2), startRadius: 0, endCenter: CGPoint(x: frame.width / 2 + 5, y: frame.height / 2 + 5), endRadius: 10, options: .drawsBeforeStartLocation)
+        UIColor(red: 231/255, green: 107/255, blue: 107/255, alpha: 1).setStroke()
         context?.drawPath(using: .stroke)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E718C2291F092CD100426ED9 /* AAPlayerSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E718C2281F092CD100426ED9 /* AAPlayerSlider.swift */; };
 		E72390C11F07D630000C8AC8 /* AAPlayProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72390C01F07D630000C8AC8 /* AAPlayProgressView.swift */; };
+		E7A2691A1F277B8200F9FF00 /* AAPlayerRotateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A269191F277B8200F9FF00 /* AAPlayerRotateButton.swift */; };
 		E7A6C3F21F03DE130029AFD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6C3F11F03DE130029AFD7 /* AppDelegate.swift */; };
 		E7A6C3F41F03DE130029AFD7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A6C3F31F03DE130029AFD7 /* ViewController.swift */; };
 		E7A6C3F71F03DE130029AFD7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A6C3F51F03DE130029AFD7 /* Main.storyboard */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		E718C2281F092CD100426ED9 /* AAPlayerSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAPlayerSlider.swift; sourceTree = "<group>"; };
 		E72390C01F07D630000C8AC8 /* AAPlayProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAPlayProgressView.swift; sourceTree = "<group>"; };
+		E7A269191F277B8200F9FF00 /* AAPlayerRotateButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AAPlayerRotateButton.swift; sourceTree = "<group>"; };
 		E7A6C3EE1F03DE130029AFD7 /* AAPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AAPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7A6C3F11F03DE130029AFD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7A6C3F31F03DE130029AFD7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 				E7A6C4051F0781D70029AFD7 /* AAPlayButton.swift */,
 				E718C2281F092CD100426ED9 /* AAPlayerSlider.swift */,
 				E7AB53261F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift */,
+				E7A269191F277B8200F9FF00 /* AAPlayerRotateButton.swift */,
 			);
 			name = AAPlayer;
 			sourceTree = "<group>";
@@ -167,6 +170,7 @@
 				E7A6C4041F03DEB90029AFD7 /* AAPlayer.swift in Sources */,
 				E72390C11F07D630000C8AC8 /* AAPlayProgressView.swift in Sources */,
 				E7AB53271F2597D80036B885 /* AAPlayerActivityIndicicatorView.swift in Sources */,
+				E7A2691A1F277B8200F9FF00 /* AAPlayerRotateButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

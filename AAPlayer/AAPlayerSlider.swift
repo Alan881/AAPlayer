@@ -31,8 +31,8 @@ class AAPlayerSlider: UISlider {
         context!.setFillColor(UIColor(red: 36/255, green: 153/255, blue: 145/255, alpha: 1).cgColor)
         context?.addEllipse(in: CGRect(x: 0, y: 0, width: 23, height: 23))
         context!.drawPath(using: .fill)
-        let image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         setThumbImage(image, for: .normal)
     }
     

@@ -8,7 +8,7 @@
 
 import UIKit
 import AVFoundation
-
+import AVKit
 
 protocol AAPlayerDelegate : class {
    
@@ -28,6 +28,7 @@ class AAPlayer: UIView {
     fileprivate var playButton:AAPlayButton!
     fileprivate var playActivityIndicator:AAPlayerActivityIndicicatorView!
     fileprivate var smallPlayButton:AAPlayButton!
+    fileprivate var rotateSizeButton:AAPlayerRotateButton!
     fileprivate var playProgressView:AAPlayProgressView!
     fileprivate var playerSlider:AAPlayerSlider!
     fileprivate var playerBottomView:UIView!
@@ -45,6 +46,7 @@ class AAPlayer: UIView {
         initWithSlider()
         initWithTimeLabel()
         initWithPlayActivityIndicator()
+        initWithRotateButton()
     }
     
     //MARK:- Interface Builder(Xib,StoryBoard)
@@ -57,6 +59,7 @@ class AAPlayer: UIView {
         initWithSlider()
         initWithTimeLabel()
         initWithPlayActivityIndicator()
+        initWithRotateButton()
     }
 
     deinit {
@@ -69,7 +72,7 @@ class AAPlayer: UIView {
         super.layoutSubviews()
         
         setPlayerSubviewsFrame()
-        
+        detectedInterfaceOrientation()
     }
     
     
@@ -90,7 +93,7 @@ class AAPlayer: UIView {
     
     
     fileprivate func initWithPlayButton() {
-    
+        
         playButton = AAPlayButton()
         playButton.addTarget(self, action: #selector(startPlay), for: .touchUpInside)
         addSubview(playButton)
@@ -99,6 +102,12 @@ class AAPlayer: UIView {
         playerBottomView.addSubview(smallPlayButton)
     }
     
+    fileprivate func initWithRotateButton() {
+        
+        rotateSizeButton = AAPlayerRotateButton()
+        playerBottomView.addSubview(rotateSizeButton)
+        
+    }
     
     fileprivate func initWithPlayActivityIndicator() {
         
@@ -134,7 +143,7 @@ class AAPlayer: UIView {
         
         timeLabel = UILabel()
         timeLabel.textColor = UIColor.white
-        timeLabel.font = UIFont.boldSystemFont(ofSize: 9)
+        timeLabel.font = UIFont.boldSystemFont(ofSize: 10)
         playerBottomView.addSubview(timeLabel)
     }
     
@@ -145,14 +154,34 @@ class AAPlayer: UIView {
         playerLayer?.frame = bounds
         playButton.frame = CGRect(x: frame.width / 2 - 25, y: frame.height / 2 - 25, width: 50, height: 50)
         playButton.center = CGPoint(x: frame.width / 2 , y: frame.height / 2)
-        playProgressView.frame = CGRect(x: 50, y: playerBottomView.frame.height / 2, width: playerBottomView.frame.width - 165, height: 2)
-        playerSlider.frame = CGRect(x: 45, y: playerBottomView.frame.height / 2 - 9, width: playerBottomView.frame.width - 140, height: 20)
+        playProgressView.frame = CGRect(x: 50, y: playerBottomView.frame.height / 2, width: playerBottomView.frame.width - 230, height: 2)
+        playerSlider.frame = CGRect(x: 45, y: playerBottomView.frame.height / 2 - 9, width: playerBottomView.frame.width - 205, height: 20)
         smallPlayButton.frame = CGRect(x: 10, y: playerBottomView.frame.height / 2 - 11, width: 30, height: 25)
-        timeLabel.frame = CGRect(x: playerBottomView.frame.width - 95, y: playerBottomView.frame.height / 2 - 9, width: 100, height: 20)
+        timeLabel.frame = CGRect(x: playerBottomView.frame.width - 155, y: playerBottomView.frame.height / 2 - 9, width: 110, height: 20)
         playActivityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
         playActivityIndicator.frame.size = CGSize(width: 90, height: 90)
+        rotateSizeButton.frame = CGRect(x: playerBottomView.frame.width - 45, y: 5, width:40, height: 40)
+        
     }
     
+    //MARL:- interface orientation
+    func detectedInterfaceOrientation()  {
+        
+        switch UIDevice.current.orientation {
+        case .portrait:
+            rotateSizeButton.isSelected = false
+            break
+        case .landscapeRight:
+            rotateSizeButton.isSelected = true
+            break
+        case .landscapeLeft:
+            rotateSizeButton.isSelected = true
+            break
+        default:
+            rotateSizeButton.isSelected = false
+            break
+        }
+    }
     
     //MARK:- setting player
     fileprivate func setPlayRemoteUrl() {
@@ -170,6 +199,7 @@ class AAPlayer: UIView {
         playerLayer?.contentsScale = UIScreen.main.scale
         layer.insertSublayer(playerLayer!, at: 0)
         setAllObserver()
+        
     }
     
     //MARK:- setting observer
@@ -228,7 +258,7 @@ class AAPlayer: UIView {
             playbackObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 1), queue: nil, using: { (time) in
                 let during = self.playerItem!.currentTime()
                 let time = during.value / Int64(during.timescale)
-                self.timeLabel.text = "\(self.timeFotmatter(Float(time)))/\(allTimeString)"
+                self.timeLabel.text = "\(self.timeFotmatter(Float(time))) / \(allTimeString)"
                 if !self.playerSlider.isHighlighted {
                     self.playerSlider.value = Float(time)
                 }
@@ -360,7 +390,9 @@ class AAPlayer: UIView {
         playActivityIndicator.startAnimation()
         let seekDuration = playerSlider.value
         player?.seek(to: CMTimeMake(Int64(seekDuration), 1), completionHandler: { (BOOL) in
-            
+            if self.playProgressView.progress == 1.0 {
+                self.playActivityIndicator.stopAnimation()
+            }
         })
 
     }
@@ -394,12 +426,16 @@ class AAPlayer: UIView {
         if playbackObserver != nil {
             player?.removeTimeObserver(playbackObserver!)
             playbackObserver = nil
+        }
+        if player?.rate == 1 {
             player?.pause()
         }
+        playActivityIndicator.stopAnimation()
         playerLayer?.removeFromSuperlayer()
         playerSlider.removeTarget(self, action: #selector(changePlayerProgress), for: .valueChanged)
         playerSlider.value = 0.0
-        timeLabel.text = "00:00:00/00:00:00"
+        playProgressView.progress = 0.0
+        timeLabel.text = "00:00:00 / 00:00:00"
     }
     
     func startPlayback() {
@@ -419,6 +455,7 @@ class AAPlayer: UIView {
         // Drawing code
     }
     */
+    
 
 }
 
