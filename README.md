@@ -13,3 +13,20 @@
 #### Playing Status
 
 ![](./sampleImage/samplePlay.gif)
+
+# Installation
+
+#### CocoaPods
+
+AAPlayer is available through [CocoaPods](http://cocoapods.org).
+
+Simply add AAPlayer to your `Podfile`.
+
+```
+pod 'AAPlayer'
+```
+Enter command instruction into your terminal.
+
+```
+pod install
+```
