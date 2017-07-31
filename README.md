@@ -6,6 +6,6 @@
 # Feature
 
 - [x] Pure swift 3.1 code
-- [x] Use UIGraphics to draw all icons for buttons
+- [x] Use UIGraphics to draw icons for buttons
 - [x] Supported video formats : HLS, mp4
 - [x] Require iOS 8 or later
