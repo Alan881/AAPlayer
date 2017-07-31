@@ -11,8 +11,8 @@ import UIKit
 
 
 class ViewController: UIViewController, AAPlayerDelegate {
-    
     @IBOutlet weak var player: AAPlayer!
+    
     fileprivate var sourceArray: Array<Any>!
     fileprivate var currentIndex = 0
     
@@ -65,6 +65,17 @@ class ViewController: UIViewController, AAPlayerDelegate {
         default:
             break
         }
+    }
+    
+    
+    func startPlay() {
+        //optional method
+        player.startPlayback()
+    }
+    
+    func stopPlay() {
+        //optional method
+        player.pausePlayback()
     }
     
 
