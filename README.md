@@ -42,9 +42,7 @@ Then you must also create a IBOutlet in your UIViewController Class with AAPlaye
 
 The following sample code for your reference.
 
-```swift
-    var titleArray = [String]()
-    
+```swift 
     override func viewDidLoad() {
         super.viewDidLoad()
      
