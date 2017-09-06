@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
  s.name = 'AAPlayer'
- s.version = '1.0.1'
+ s.version = '1.0.2'
  s.license = { :type => "MIT", :file => "LICENSE.md" }
  s.summary = 'Customize Video Player base on AVPlayer'
  s.homepage = 'https://github.com/Alan881/AAPlayer'
