@@ -195,7 +195,7 @@ public class AAPlayer: UIView {
         playerItem = AVPlayerItem(asset: asset)
         player = AVPlayer(playerItem: playerItem)
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = AVLayerVideoGravityResizeAspect
+        playerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
         playerLayer?.contentsScale = UIScreen.main.scale
         layer.insertSublayer(playerLayer!, at: 0)
         setAllObserver()

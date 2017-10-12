@@ -19,7 +19,7 @@ class ViewController: UIViewController, AAPlayerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sourceArray = ["http://d3tz4ep8usobz3.cloudfront.net/clip/19/clip.m3u8","http://live.zzbtv.com:80/live/live123/800K/tzwj_video.m3u8","http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0173bbaf5acf62b815a7de0544730d6c.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/00a52c5e2213216ce0ce3795d40e9492.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0045ab5a9e440defb2611658c0914724.mp4"]
+        sourceArray = ["http://live.zzbtv.com:80/live/live123/800K/tzwj_video.m3u8","http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0173bbaf5acf62b815a7de0544730d6c.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/00a52c5e2213216ce0ce3795d40e9492.mp4","http://bos.nj.bpc.baidu.com/tieba-smallvideo/0045ab5a9e440defb2611658c0914724.mp4"]
         player.delegate = self
         player.playVideo(sourceArray[currentIndex] as! String)
         
