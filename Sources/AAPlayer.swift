@@ -10,16 +10,16 @@ import UIKit
 import AVFoundation
 import AVKit
 
-protocol AAPlayerDelegate : class {
+public protocol AAPlayerDelegate : class {
    
     typealias playerItemStatus = AVPlayerItemStatus
     func callBackDownloadDidFinish(_ status:AVPlayerItemStatus?)
 }
 
 
-class AAPlayer: UIView {
+public class AAPlayer: UIView {
     
-    weak var delegate:AAPlayerDelegate?
+    public weak var delegate:AAPlayerDelegate?
    
     fileprivate var player:AVPlayer?
     fileprivate var playerLayer:AVPlayerLayer?
@@ -50,7 +50,7 @@ class AAPlayer: UIView {
     }
     
     //MARK:- Interface Builder(Xib,StoryBoard)
-    override func awakeFromNib() {
+    override public func awakeFromNib() {
         super.awakeFromNib()
         
         initWithPlayBottomView()
@@ -68,7 +68,7 @@ class AAPlayer: UIView {
         resettingObject()
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         
         setPlayerSubviewsFrame()
@@ -76,9 +76,9 @@ class AAPlayer: UIView {
     }
     
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        //fatalError("init(coder:) has not been implemented")
+        
     }
 
     //MARK:- initialize method
@@ -195,7 +195,7 @@ class AAPlayer: UIView {
         playerItem = AVPlayerItem(asset: asset)
         player = AVPlayer(playerItem: playerItem)
         playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = AVLayerVideoGravityResizeAspect
+        playerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
         playerLayer?.contentsScale = UIScreen.main.scale
         layer.insertSublayer(playerLayer!, at: 0)
         setAllObserver()
@@ -220,7 +220,7 @@ class AAPlayer: UIView {
     }
     
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         
         if keyPath == "status" {
             
@@ -346,7 +346,7 @@ class AAPlayer: UIView {
 
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         setPlayBottomViewAnimation()
         stopTimer()
@@ -415,7 +415,7 @@ class AAPlayer: UIView {
     }
     
     //MARK: - public control method
-    func playVideo(_ url:String) {
+    public func playVideo(_ url:String) {
         
         playUrl = url
         playButton.isHidden = false
@@ -436,12 +436,12 @@ class AAPlayer: UIView {
         timeLabel.text = "00:00:00 / 00:00:00"
     }
     
-    func startPlayback() {
+    public func startPlayback() {
         
         player?.play()
     }
     
-    func pausePlayback() {
+    public func pausePlayback() {
         
         player?.pause()
     }
