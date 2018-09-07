@@ -10,16 +10,20 @@ import UIKit
 import AVFoundation
 import AVKit
 
+
 public protocol AAPlayerDelegate : class {
-   
+    
     typealias playerItemStatus = AVPlayerItemStatus
     func callBackDownloadDidFinish(_ status:AVPlayerItemStatus?)
 }
 
 
-public class AAPlayer: UIView {
+public class AAPlayer: UIView, ffmpegDelegate, OpenGLESViewPTZDelegate {
     
     public weak var delegate:AAPlayerDelegate?
+    public enum decoder: Int {
+        case native = 0, ffmpeg
+    }
    
     fileprivate var player:AVPlayer?
     fileprivate var playerLayer:AVPlayerLayer?
@@ -35,11 +39,15 @@ public class AAPlayer: UIView {
     fileprivate var timeLabel:UILabel!
     fileprivate var timer:Timer?
     fileprivate var playbackObserver:Any?
-    
+    fileprivate var playerDecoderSource:decoder!
+    fileprivate static let playerFF = AAPlayerDecode()
+    fileprivate var displayFFImageView: UIImageView!
+    fileprivate var displayOpenGLFrameView: OpenGLFrameView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        initWithDisplayFFmpeg()
         initWithPlayBottomView()
         initWithPlayButton()
         initWithPlayProgressView()
@@ -53,6 +61,7 @@ public class AAPlayer: UIView {
     override public func awakeFromNib() {
         super.awakeFromNib()
         
+        initWithDisplayFFmpeg()
         initWithPlayBottomView()
         initWithPlayButton()
         initWithPlayProgressView()
@@ -147,9 +156,21 @@ public class AAPlayer: UIView {
         playerBottomView.addSubview(timeLabel)
     }
     
+    fileprivate func initWithDisplayFFmpeg() {
+        
+        displayFFImageView = UIImageView()
+        displayFFImageView.contentMode = .scaleAspectFit
+//        displayOpenGLFrameView = OpenGLFrameView()
+//        displayOpenGLFrameView = OpenGLFrameView.init(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+//        displayOpenGLFrameView.openGLESViewPTZDelegate = self
+        insertSubview(displayFFImageView, at: 0)
+    }
+    
     //MARK:- frame method
     fileprivate func setPlayerSubviewsFrame() {
         
+        displayFFImageView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+       // displayOpenGLFrameView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         playerBottomView.frame = CGRect(x: 0, y: frame.height - 50, width: frame.width, height: 50)
         playerLayer?.frame = bounds
         playButton.frame = CGRect(x: frame.width / 2 - 25, y: frame.height / 2 - 25, width: 50, height: 50)
@@ -189,17 +210,26 @@ public class AAPlayer: UIView {
         if playUrl == nil || playUrl == "" {
             return
         }
-        removeAllObserver()
-        resettingObject()
-        let asset = AVAsset(url: URL(string: playUrl)!)
-        playerItem = AVPlayerItem(asset: asset)
-        player = AVPlayer(playerItem: playerItem)
-        playerLayer = AVPlayerLayer(player: player)
-        playerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
-        playerLayer?.contentsScale = UIScreen.main.scale
-        layer.insertSublayer(playerLayer!, at: 0)
-        setAllObserver()
         
+        if playerDecoderSource == decoder.ffmpeg {
+            AAPlayer.playerFF.delegate = self
+            let result = AAPlayer.playerFF.receiveResource(playUrl)
+            if result == false {
+                return
+            }
+        } else {
+            removeAllObserver()
+            resettingObject()
+            let asset = AVAsset(url: URL(string: playUrl)!)
+            playerItem = AVPlayerItem(asset: asset)
+            player = AVPlayer(playerItem: playerItem)
+            playerLayer = AVPlayerLayer(player: player)
+            playerLayer?.videoGravity = AVLayerVideoGravity.resizeAspect
+            playerLayer?.contentsScale = UIScreen.main.scale
+            layer.insertSublayer(playerLayer!, at: 0)
+            setAllObserver()
+        }
+    
     }
     
     //MARK:- setting observer
@@ -255,7 +285,7 @@ public class AAPlayer: UIView {
             playerSlider.addTarget(self, action: #selector(changePlayerProgress), for: .valueChanged)
             playerSlider.maximumValue = Float(CMTimeGetSeconds((playerItem?.duration)!))
             let allTimeString = timeFotmatter(Float(CMTimeGetSeconds((playerItem?.duration)!)))
-            playbackObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 1), queue: nil, using: { (time) in
+            playbackObserver = player?.addPeriodicTimeObserver(forInterval: CMTimeMake(1, 1), queue: nil, using: { [unowned self] (time) in
                 let during = self.playerItem!.currentTime()
                 let time = during.value / Int64(during.timescale)
                 self.timeLabel.text = "\(self.timeFotmatter(Float(time))) / \(allTimeString)"
@@ -329,16 +359,23 @@ public class AAPlayer: UIView {
             playActivityIndicator.startAnimation()
         }
         
-        if player?.rate == 0 {
-            player?.play()
+        if player?.rate == 0 || AAPlayer.playerFF.isReady == true {
+            if playerDecoderSource == decoder.ffmpeg {
+                AAPlayer.playerFF.play()
+            } else {
+                player?.play()
+            }
             playButton.isSelected = true
             playButton.isHidden = true
             smallPlayButton.isSelected = true
             stopTimer()
             startTimer()
-            
         } else {
-            player?.pause()
+            if playerDecoderSource == decoder.ffmpeg {
+                AAPlayer.playerFF.stop()
+            } else {
+                player?.pause()
+            }
             playButton.isSelected = false
             smallPlayButton.isSelected = false
             stopTimer()
@@ -414,13 +451,37 @@ public class AAPlayer: UIView {
         
     }
     
+    //
+    public func callBackYUVFrame(_ frame: UnsafeMutablePointer<H264YUV_Frame>) {
+        // DispatchQueue.main.sync {
+            self.displayOpenGLFrameView.render(frame)
+        //}
+    }
+    
+    //MARK:- ffmpegDelegate method
+    public func callBackImage(_ image: UIImage) {
+        DispatchQueue.main.async {
+            self.displayFFImageView.image = image
+        }
+    }
+    
     //MARK: - public control method
-    public func playVideo(_ url:String) {
+    public func playVideo(_ url:String, _ decodeSource:decoder) {
         
         playUrl = url
+        playerDecoderSource = decodeSource
         playButton.isHidden = false
         playButton.isSelected = false
         smallPlayButton.isSelected = false
+        switch decodeSource {
+        case .native:
+            
+            break
+        case .ffmpeg:
+            AAPlayer.playerFF.stop()
+            break
+        }
+        
         if playbackObserver != nil {
             player?.removeTimeObserver(playbackObserver!)
             playbackObserver = nil
@@ -435,6 +496,7 @@ public class AAPlayer: UIView {
         playProgressView.progress = 0.0
         timeLabel.text = "00:00:00 / 00:00:00"
     }
+    
     
     public func startPlayback() {
         

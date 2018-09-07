@@ -22,8 +22,8 @@ class AAPlayerActivityIndicicatorView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-    
     }
+    
     override func layoutSubviews() {
         
         indicicatorLayer.frame = CGRect(x: 0,y: 0,width: frame.size.width,height: frame.size.height)
@@ -91,10 +91,10 @@ class AAPlayerActivityIndicicatorView: UIView {
     
     func startAnimation() {
         
-        if indicicatorLayer.animation(forKey: "rotation") == nil {
-            indicicatorLayer.add(setAnimation(), forKey: "rotation")
-        }
-        
+//        if indicicatorLayer.animation(forKey: "rotation") == nil {
+//            indicicatorLayer.add(setAnimation(), forKey: "rotation")
+//        }
+//        
         isHidden = false
         resumeAnimation()
     }
